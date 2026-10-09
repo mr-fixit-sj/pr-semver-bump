@@ -34984,22 +34984,30 @@ async function validateActivePR(config) {
     let releaseNotes
     try {
         releaseType = getReleaseType(pr, config)
-        releaseNotes = getReleaseNotes(pr, config)
+        // A no-op label means no release, so there are no release notes to require.
+        if (releaseType !== 'skip') {
+            releaseNotes = getReleaseNotes(pr, config)
+        }
     } catch (e) {
         core.setFailed(`PR validation failed: ${e.message}`)
         return
     }
 
     const currentVersion = await getCurrentVersion(config)
-    const newVersion = semver.inc(currentVersion, releaseType)
-
     core.info(`current version: ${config.v}${currentVersion}`)
-    core.info(`next version: ${config.v}${newVersion}`)
-    core.info(`release notes:\n${releaseNotes}`)
-
     core.setOutput('old-version', `${config.v}${currentVersion}`)
-    core.setOutput('version', `${config.v}${newVersion}`)
-    core.setOutput('release-notes', releaseNotes)
+
+    if (releaseType === 'skip') {
+        core.info('PR has a no-op label, no new version will be released')
+    } else {
+        const newVersion = semver.inc(currentVersion, releaseType)
+        core.info(`next version: ${config.v}${newVersion}`)
+        core.info(`release notes:\n${releaseNotes}`)
+
+        core.setOutput('version', `${config.v}${newVersion}`)
+        core.setOutput('release-notes', releaseNotes)
+    }
+    core.setOutput('skipped', (releaseType === 'skip'))
 }
 
 // Increments the version according to the release type and tags a new version with release notes.
