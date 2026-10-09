@@ -26,7 +26,7 @@ Most version bumping workflows rely on the presense of substrings in commit mess
 
 **pr-semver-bump** runs in one of two modes: `validate` and `bump`.
 
-> **Requirements:** this action runs on the `node24` runtime and requires GitHub Actions Runner v2.327.1 or newer (GitHub-hosted runners already qualify). Replace `vX.Y.Z` in the examples below with the [latest release tag](https://github.com/mr-fixit-sj/pr-semver-bump/tags).
+> **Requirements:** this action runs on the `node24` runtime and requires GitHub Actions Runner v2.327.1 or newer (GitHub-hosted runners already qualify). The examples below use the floating `@v2` tag, which always points to the newest `v2.x.y` release. To pin an exact version, use a [release tag](https://github.com/mr-fixit-sj/pr-semver-bump/tags) such as `@v2.0.0`, or a full commit SHA for maximum supply-chain safety.
 
 Use **validate** mode as a merge gate for pull requests to ensure they contain the necessary metadata for your next release:
 
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
+      - uses: mr-fixit-sj/pr-semver-bump@v2
         name: Validate Pull Request Metadata
         with:
           mode: validate
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
+      - uses: mr-fixit-sj/pr-semver-bump@v2
         name: Bump and Tag Version
         with:
           mode: bump
@@ -86,7 +86,7 @@ Inputs can be used to customize the behavior of the action in both modes.
 | `major-label`           | The name of the label that indicates the pull request should result in a **major** version bump. _Default: 'major release'_.                                                                              |
 | `minor-label`           | The name of the label that indicates the pull request should result in a **minor** version bump. _Default: 'minor release'_.                                                                              |
 | `patch-label`           | The name of the label that indicates the pull request should result in a **patch** version bump. _Default: 'patch release'_.                                                                              |
-| `noop-labels`           | The list of label names that indicates the pull request should **not** result in a updated version bump. _Default: ''_.                                                                      |
+| `noop-labels`           | The label names (one per line, as a multi-line string) that indicate the pull request should **not** result in a updated version bump. _Default: ''_.                                                                      |
 | `require-release-notes` | Whether or not release notes are required.                                                                                                                                                                |
 | `release-notes-prefix`  | If defined, constrains release notes to any text appearing after a line matching this pattern in the pull request body. By default, release notes start at the beginning of the pull request description. |
 | `release-notes-suffix`  | If defined, constrains release notes to any text appearing before a line matching this pattern in the pull request body. By default, release notes end at the end of the pull request description.        |
@@ -100,15 +100,15 @@ By default, the action expects pull requests to be [labeled](https://docs.github
 You can specify your own labels instead. For example, if you always use minor releases for features and patch releases for bugs, you might want:
 
 ```yaml
-uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
+uses: mr-fixit-sj/pr-semver-bump@v2
 name: Validate PR Metadata
 with:
   mode: validate
   repo-token: ${{ secrets.GITHUB_TOKEN }}
   minor-label: new-feature
   patch-label: bug-fix
-  noop-labels:
-    - documentation change
+  noop-labels: |
+    documentation change
 ```
 
 ### Requiring Release Notes
@@ -116,7 +116,7 @@ with:
 Setting `require-release-notes: true` in your workflow configuration will require that some sort of release notes be present. By default, the entire pull request description is used as release notes.
 
 ```yaml
-uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
+uses: mr-fixit-sj/pr-semver-bump@v2
 name: Validate PR Metadata
 with:
   mode: validate
@@ -129,7 +129,7 @@ with:
 By default, the entire pull request description is used as the release notes. If you want to constrain the release notes to just a subset of the description, you can define `release-notes-prefix` and/or `release-notes-suffix` as bounding patterns for the release notes. Lines matching these patterns frame the desired release notes. Any text appearing before the prefix pattern or after the suffix pattern will be ignored.
 
 ```yaml
-uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
+uses: mr-fixit-sj/pr-semver-bump@v2
   name: Validate PR Metadata
   with:
     mode: validate
@@ -203,7 +203,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
+      - uses: mr-fixit-sj/pr-semver-bump@v2
         name: Validate Pull Request Metadata
         with:
           mode: validate
@@ -211,8 +211,8 @@ jobs:
           major-label: major release
           minor-label: minor release
           patch-label: patch release
-          noop-labels:
-            - documentation change
+          noop-labels: |
+            documentation change
           require-release-notes: true
           release-notes-prefix: ''
           release-notes-suffix: ''
@@ -236,7 +236,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
+      - uses: mr-fixit-sj/pr-semver-bump@v2
         name: Bump and Tag Version
         with:
           mode: bump
@@ -244,8 +244,8 @@ jobs:
           major-label: major release
           minor-label: minor release
           patch-label: patch release
-          noop-labels:
-            - documentation change
+          noop-labels: |
+            documentation change
           require-release-notes: true
           release-notes-prefix: ''
           release-notes-suffix: ''
