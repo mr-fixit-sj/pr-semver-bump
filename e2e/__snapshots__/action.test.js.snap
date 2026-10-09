@@ -284,12 +284,11 @@ exports[`bump: missing required notes 1`] = `
 
 exports[`bump: no PR for commit (direct push or first commit) 1`] = `
 {
-  "exitCode": 1,
+  "exitCode": 0,
   "log": [
     "::add-mask::tok123",
     "Unable to determine PR from commit msg, searching for PR by SHA",
-    "Error: Failed to find PR by commit SHA headsha: No results found querying for the PR",
-    "::error::unexpected error: Failed to find PR by commit SHA headsha: No results found querying for the PR",
+    "::warning::head commit doesn't look like a PR merge, skipping version bumping and tagging",
     "",
   ],
   "outputs": [
@@ -300,7 +299,7 @@ exports[`bump: no PR for commit (direct push or first commit) 1`] = `
       "auth": "token tok123",
       "body": undefined,
       "method": "GET",
-      "path": "/search/issues?q=type:pr is:merged headsha",
+      "path": "/search/issues?q=repo:o/r type:pr is:merged headsha",
     },
   ],
 }
@@ -479,7 +478,7 @@ exports[`bump: rebase merge, PR found via search 1`] = `
       "auth": "token tok123",
       "body": undefined,
       "method": "GET",
-      "path": "/search/issues?q=type:pr is:merged headsha",
+      "path": "/search/issues?q=repo:o/r type:pr is:merged headsha",
     },
     {
       "auth": "token tok123",

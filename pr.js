@@ -19,15 +19,20 @@ function extractPRNumber(commitMsg) {
     return null
 }
 
+// Returns the merged PR containing the given commit, or null if there is none
+// (e.g. a direct push or the repository's first commit).
 async function searchPRByCommit(commitSHA, config) {
     // Query GitHub to see if the commit sha is related to a PR
     // Rebase merge will not have the information in the commit message
     try {
-        const q = `type:pr is:merged ${commitSHA}`
+        // Scope to this repository: commit SHAs are shared with forks, so an unscoped
+        // search can return a merged PR from another repository.
+        const { owner, repo } = github.context.repo
+        const q = `repo:${owner}/${repo} type:pr is:merged ${commitSHA}`
         const data = await config.octokit.rest.search.issuesAndPullRequests({ q })
 
         if (data.data.total_count < 1) {
-            throw new Error('No results found querying for the PR')
+            return null
         }
 
         // We should only find one PR with the commit SHA that was merged so take the first one
