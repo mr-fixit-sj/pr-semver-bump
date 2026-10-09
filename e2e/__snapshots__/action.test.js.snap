@@ -1,0 +1,1519 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`bump: PR not found 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "Error: failed to fetch data for PR #18: Not Found",
+    "::error::unexpected error: failed to fetch data for PR #18: Not Found",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/18",
+    },
+  ],
+}
+`;
+
+exports[`bump: base-branch from GITHUB_REF 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #20",
+    "Only considering tags on branch main",
+    "Created release tag v2.5.1 with the following release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+    "",
+  ],
+  "outputs": [
+    "version<<DELIMITER",
+    "v2.5.1",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "old-version<<DELIMITER",
+    "v2.5.0",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/20",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/commits?sha=main",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/commits?sha=main&page=2",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/commits?sha=main&page=3",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/tags/tagobjB",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/tags/tagobjA",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "v2.5.1",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "ref": "refs/tags/v2.5.1",
+        "sha": "newtagobj",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/refs",
+    },
+  ],
+}
+`;
+
+exports[`bump: first release, no tags 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #19",
+    "Created release tag v0.1.0 with the following release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+    "",
+  ],
+  "outputs": [
+    "version<<DELIMITER",
+    "v0.1.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "old-version<<DELIMITER",
+    "v0.0.0",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/19",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "v0.1.0",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "ref": "refs/tags/v0.1.0",
+        "sha": "newtagobj",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/refs",
+    },
+  ],
+}
+`;
+
+exports[`bump: merge commit, major 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #12",
+    "Created release tag v2.0.0 with the following release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+    "",
+  ],
+  "outputs": [
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/12",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "v2.0.0",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "ref": "refs/tags/v2.0.0",
+        "sha": "newtagobj",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/refs",
+    },
+  ],
+}
+`;
+
+exports[`bump: missing required notes 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #16",
+    "Error: missing release notes",
+    "::error::unexpected error: missing release notes",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/16",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`bump: no PR for commit (direct push or first commit) 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "Unable to determine PR from commit msg, searching for PR by SHA",
+    "Error: Failed to find PR by commit SHA headsha: No results found querying for the PR",
+    "::error::unexpected error: Failed to find PR by commit SHA headsha: No results found querying for the PR",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/search/issues?q=type:pr is:merged headsha",
+    },
+  ],
+}
+`;
+
+exports[`bump: no release label 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #17",
+    "Error: no release label specified on PR",
+    "::error::unexpected error: no release label specified on PR",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/17",
+    },
+  ],
+}
+`;
+
+exports[`bump: noop label 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #15",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "true",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/15",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`bump: prerelease current, patch 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #21",
+    "Created release tag v1.2.3 with the following release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+    "",
+  ],
+  "outputs": [
+    "version<<DELIMITER",
+    "v1.2.3",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "old-version<<DELIMITER",
+    "v1.2.3-rc.2",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/21",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "v1.2.3",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "ref": "refs/tags/v1.2.3",
+        "sha": "newtagobj",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/refs",
+    },
+  ],
+}
+`;
+
+exports[`bump: push without head commit 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "::warning::in 'bump' mode, but this doesn't look like a PR merge commit event (is your workflow misconfigured?)",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [],
+}
+`;
+
+exports[`bump: rebase merge, PR found via search 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Unable to determine PR from commit msg, searching for PR by SHA",
+    "Processing version bump for PR request #14",
+    "Created release tag v2.0.0 with the following release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+    "",
+  ],
+  "outputs": [
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/search/issues?q=type:pr is:merged headsha",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "v2.0.0",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "ref": "refs/tags/v2.0.0",
+        "sha": "newtagobj",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/refs",
+    },
+  ],
+}
+`;
+
+exports[`bump: squash commit, patch, no v 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #13",
+    "Created release tag 2.0.0 with the following release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+    "",
+  ],
+  "outputs": [
+    "version<<DELIMITER",
+    "2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "old-version<<DELIMITER",
+    "2.0.0-beta.1",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/13",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "2.0.0",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "ref": "refs/tags/2.0.0",
+        "sha": "newtagobj",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/refs",
+    },
+  ],
+}
+`;
+
+exports[`bump: tag creation forbidden 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #22",
+    "HttpError: Resource not accessible by integration",
+    "::error::unexpected error: Resource not accessible by integration",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/22",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "v2.0.0",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+  ],
+}
+`;
+
+exports[`bump: wrong event 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "::warning::in 'bump' mode, but this doesn't look like a PR merge commit event (is your workflow misconfigured?)",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [],
+}
+`;
+
+exports[`validate: PR not found 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "::error::failed to fetch data for PR #99: Not Found",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/99",
+    },
+  ],
+}
+`;
+
+exports[`validate: base-branch with paginated commits 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Only considering tags on branch main",
+    "current version: v2.5.0",
+    "next version: v2.6.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.5.0",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.6.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/commits?sha=main",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/commits?sha=main&page=2",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/commits?sha=main&page=3",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/tags/tagobjB",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/tags/tagobjA",
+    },
+  ],
+}
+`;
+
+exports[`validate: base-branch, no tag on branch 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Only considering tags on branch main",
+    "current version: v0.0.0",
+    "next version: v0.1.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v0.0.0",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v0.1.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/commits?sha=main",
+    },
+  ],
+}
+`;
+
+exports[`validate: custom labels, no tags, no v 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: 0.0.0",
+    "next version: 0.1.0",
+    "release notes:",
+    "n",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "0.0.0",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "0.1.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "n",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: duplicate v and non-v tags 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v1.2.3",
+    "next version: v1.3.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v1.2.3",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v1.3.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: invalid mode 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "Error: mode must be either 'validate' or 'bump'",
+    "::error::unexpected error: mode must be either 'validate' or 'bump'",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [],
+}
+`;
+
+exports[`validate: loose and odd tags 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v1.2.8--",
+    "next version: v1.2.8",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v1.2.8--",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v1.2.8",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: major with unrelated label 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-beta.1",
+    "next version: v2.0.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: minor 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-beta.1",
+    "next version: v2.0.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: missing required notes 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "::error::PR validation failed: missing release notes",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+  ],
+}
+`;
+
+exports[`validate: missing token 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "Error: Input required and not supplied: repo-token",
+    "::error::unexpected error: Input required and not supplied: repo-token",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [],
+}
+`;
+
+exports[`validate: mode is case-insensitive 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-beta.1",
+    "next version: v2.0.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: no release label 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "::error::PR validation failed: no release label specified on PR",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+  ],
+}
+`;
+
+exports[`validate: noop label only 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "::error::PR validation failed: missing release notes",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+  ],
+}
+`;
+
+exports[`validate: null body, notes optional 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: 2.0.0-beta.1",
+    "next version: 2.0.0",
+    "release notes:",
+    "",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: patch 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-beta.1",
+    "next version: v2.0.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: prefix and suffix with CRLF 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-beta.1",
+    "next version: v2.0.0",
+    "release notes:",
+    "a",
+    "b",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "a",
+    "b",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: prerelease current, major 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-0",
+    "next version: v2.0.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-0",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: prerelease current, minor 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-beta.1",
+    "next version: v2.0.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: prerelease current, patch 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v1.2.3-rc.2",
+    "next version: v1.2.3",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v1.2.3-rc.2",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v1.2.3",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: release and noop label 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "::error::PR validation failed: too manu labels specified, both release labels and noop labels specified: (minor release)  (no release) on PR",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+  ],
+}
+`;
+
+exports[`validate: suffix only 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: 2.0.0-beta.1",
+    "next version: 2.0.0",
+    "release notes:",
+    "a",
+    "b",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "a",
+    "b",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: two release labels 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "::error::PR validation failed: too many release labels specified on PR: minor release,patch release",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+  ],
+}
+`;
+
+exports[`validate: whole body as notes 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: 2.0.0-beta.1",
+    "next version: 2.0.0",
+    "release notes:",
+    "line1",
+    "line2",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "line1",
+    "line2",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
+exports[`validate: wrong event 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "::warning::in 'validate' mode, but this doesn't look like an active PR event (is your workflow misconfigured?)",
+    "",
+  ],
+  "outputs": [
+    "",
+  ],
+  "requests": [],
+}
+`;

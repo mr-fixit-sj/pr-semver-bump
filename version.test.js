@@ -22,7 +22,7 @@ test('can get the current version when version tags are available', async () => 
         },
     }
 
-    expect(getCurrentVersion(config)).resolves.toBe('1.4.1')
+    await expect(getCurrentVersion(config)).resolves.toBe('1.4.1')
 })
 
 test('returns a default version when version tags are unavailable', async () => {
@@ -43,7 +43,7 @@ test('returns a default version when version tags are unavailable', async () => 
         },
     }
 
-    expect(getCurrentVersion(config)).resolves.toBe('0.0.0')
+    await expect(getCurrentVersion(config)).resolves.toBe('0.0.0')
 })
 
 const baseBranchCases = [
@@ -192,7 +192,7 @@ test('can create a new release', async () => {
     }
 
     config.v = ''
-    expect(createRelease('1.2.3', 'mock release notes', config)).resolves.toBe('1.2.3')
+    await expect(createRelease('1.2.3', 'mock release notes', config)).resolves.toBe('1.2.3')
     config.v = 'v'
-    expect(createRelease('1.2.3', 'mock release notes', config)).resolves.toBe('v1.2.3')
+    await expect(createRelease('1.2.3', 'mock release notes', config)).resolves.toBe('v1.2.3')
 })

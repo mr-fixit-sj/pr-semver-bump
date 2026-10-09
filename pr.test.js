@@ -38,7 +38,7 @@ test('searchPRByCommit returns a PR', async () => {
             },
         },
     }
-    expect(searchPRByCommit(sha, config)).resolves.toEqual({ number: 15, id: sha })
+    await expect(searchPRByCommit(sha, config)).resolves.toEqual({ number: 15, id: sha })
 })
 
 test('searchPRByCommit Fails to find PR', async () => {
@@ -52,7 +52,7 @@ test('searchPRByCommit Fails to find PR', async () => {
             },
         },
     }
-    expect(searchPRByCommit(sha, config)).rejects.toThrow(`Failed to find PR by commit SHA ${sha}: No results found querying for the PR`)
+    await expect(searchPRByCommit(sha, config)).rejects.toThrow(`Failed to find PR by commit SHA ${sha}: No results found querying for the PR`)
 })
 
 test('searchPRByCommit throws an error on query', async () => {
@@ -68,7 +68,7 @@ test('searchPRByCommit throws an error on query', async () => {
             },
         },
     }
-    expect(searchPRByCommit(sha, config)).rejects.toThrow(`Failed to find PR by commit SHA ${sha}: mock error`)
+    await expect(searchPRByCommit(sha, config)).rejects.toThrow(`Failed to find PR by commit SHA ${sha}: mock error`)
 })
 
 test('can fetch PR data', async () => {
@@ -83,7 +83,7 @@ test('can fetch PR data', async () => {
         },
     }
 
-    expect(fetchPR(42, config)).resolves.toEqual({ number: 42 })
+    await expect(fetchPR(42, config)).resolves.toEqual({ number: 42 })
 })
 
 test('throws when fetching PR data fails', async () => {
@@ -100,7 +100,7 @@ test('throws when fetching PR data fails', async () => {
         },
     }
 
-    expect(fetchPR(42, config)).rejects.toThrow('')
+    await expect(fetchPR(42, config)).rejects.toThrow('')
 })
 
 test('can get release type', () => {
