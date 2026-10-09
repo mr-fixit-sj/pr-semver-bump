@@ -1469,7 +1469,7 @@ exports[`validate: release and noop label 1`] = `
   "exitCode": 1,
   "log": [
     "::add-mask::tok123",
-    "::error::PR validation failed: too manu labels specified, both release labels and noop labels specified: (minor release)  (no release) on PR",
+    "::error::PR validation failed: too many labels specified, both release labels and noop labels specified: (minor release) (no release) on PR",
     "",
   ],
   "outputs": [
