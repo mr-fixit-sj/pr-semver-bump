@@ -64,6 +64,7 @@ module.exports = [
     validate('two release labels', base, { prs: { 7: pr(7, ['minor release', 'patch release'], NOTES) } }),
     validate('release and noop label', { ...base, 'noop-labels': 'no release' }, { prs: { 7: pr(7, ['minor release', 'no release'], NOTES) } }),
     validate('noop label only', { ...base, 'noop-labels': 'skip\nno release' }, { prs: { 7: pr(7, ['no release'], '') }, tags: mixedTags }),
+    validate('noop label only, with notes', { ...base, 'noop-labels': 'no release' }, { prs: { 7: pr(7, ['no release'], NOTES) }, tags: mixedTags }),
     validate('missing required notes', base, { prs: { 7: pr(7, ['minor release'], 'no prefix here') } }),
     validate('null body, notes optional', { 'repo-token': 'tok123' }, { prs: { 7: pr(7, ['patch release'], null) }, tags: mixedTags }),
     validate('whole body as notes', { 'repo-token': 'tok123' }, { prs: { 7: pr(7, ['patch release'], '  line1\r\nline2\r\n\r\n') }, tags: mixedTags }),

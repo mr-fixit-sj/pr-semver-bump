@@ -1124,6 +1124,48 @@ exports[`validate: noop label only 1`] = `
 }
 `;
 
+exports[`validate: noop label only, with notes 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-beta.1",
+    "next version: vnull",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "vnull",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
 exports[`validate: null body, notes optional 1`] = `
 {
   "exitCode": 0,
