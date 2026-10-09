@@ -1,10 +1,10 @@
 # pr-semver-bump
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/jefflinse/pr-semver-bump/master-ci.yml?branch=master)](https://github.com/jefflinse/pr-semver-bump/actions/workflows/master-ci.yml?query=branch%3Amaster)
-[![CodeQL](https://github.com/jefflinse/pr-semver-bump/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/jefflinse/pr-semver-bump/actions/workflows/codeql-analysis.yml?query=branch%3Amaster)
-[![Newest Release (semver)](https://img.shields.io/github/v/release/jefflinse/pr-semver-bump?sort=semver)](https://github.com/jefflinse/pr-semver-bump/releases)
-[![Newest Tag (semver)](https://img.shields.io/github/v/tag/jefflinse/pr-semver-bump)](https://github.com/jefflinse/pr-semver-bump/tags)
-[![License](https://img.shields.io/github/license/jefflinse/pr-semver-bump)](https://github.com/jefflinse/pr-semver-bump/blob/master/LICENSE)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/mr-fixit-sj/pr-semver-bump/master-ci.yml?branch=master)](https://github.com/mr-fixit-sj/pr-semver-bump/actions/workflows/master-ci.yml?query=branch%3Amaster)
+[![CodeQL](https://github.com/mr-fixit-sj/pr-semver-bump/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/mr-fixit-sj/pr-semver-bump/actions/workflows/codeql-analysis.yml?query=branch%3Amaster)
+[![Newest Release (semver)](https://img.shields.io/github/v/release/mr-fixit-sj/pr-semver-bump?sort=semver)](https://github.com/mr-fixit-sj/pr-semver-bump/releases)
+[![Newest Tag (semver)](https://img.shields.io/github/v/tag/mr-fixit-sj/pr-semver-bump)](https://github.com/mr-fixit-sj/pr-semver-bump/tags)
+[![License](https://img.shields.io/github/license/mr-fixit-sj/pr-semver-bump)](https://github.com/mr-fixit-sj/pr-semver-bump/blob/master/LICENSE)
 
 A GitHub Action to bump and tag a new [semantic version](https://semver.org) when a pull request is merged.
 
@@ -26,6 +26,8 @@ Most version bumping workflows rely on the presense of substrings in commit mess
 
 **pr-semver-bump** runs in one of two modes: `validate` and `bump`.
 
+> **Requirements:** this action runs on the `node24` runtime and requires GitHub Actions Runner v2.327.1 or newer (GitHub-hosted runners already qualify). Replace `vX.Y.Z` in the examples below with the [latest release tag](https://github.com/mr-fixit-sj/pr-semver-bump/tags).
+
 Use **validate** mode as a merge gate for pull requests to ensure they contain the necessary metadata for your next release:
 
 ```yaml
@@ -38,8 +40,8 @@ jobs:
     name: Validate Release Label and Notes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: jefflinse/pr-semver-bump@v1.6.0
+      - uses: actions/checkout@v6
+      - uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
         name: Validate Pull Request Metadata
         with:
           mode: validate
@@ -59,8 +61,8 @@ jobs:
     name: Bump and Tag Version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: jefflinse/pr-semver-bump@v1.6.0
+      - uses: actions/checkout@v6
+      - uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
         name: Bump and Tag Version
         with:
           mode: bump
@@ -98,7 +100,7 @@ By default, the action expects pull requests to be [labeled](https://docs.github
 You can specify your own labels instead. For example, if you always use minor releases for features and patch releases for bugs, you might want:
 
 ```yaml
-uses: jefflinse/pr-semver-bump@v1.6.0
+uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
 name: Validate PR Metadata
 with:
   mode: validate
@@ -114,7 +116,7 @@ with:
 Setting `require-release-notes: true` in your workflow configuration will require that some sort of release notes be present. By default, the entire pull request description is used as release notes.
 
 ```yaml
-uses: jefflinse/pr-semver-bump@v1.6.0
+uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
 name: Validate PR Metadata
 with:
   mode: validate
@@ -127,7 +129,7 @@ with:
 By default, the entire pull request description is used as the release notes. If you want to constrain the release notes to just a subset of the description, you can define `release-notes-prefix` and/or `release-notes-suffix` as bounding patterns for the release notes. Lines matching these patterns frame the desired release notes. Any text appearing before the prefix pattern or after the suffix pattern will be ignored.
 
 ```yaml
-uses: jefflinse/pr-semver-bump@v1.6.0
+uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
   name: Validate PR Metadata
   with:
     mode: validate
@@ -200,8 +202,8 @@ jobs:
     name: Validate Release Label and Notes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: jefflinse/pr-semver-bump@v1.6.0
+      - uses: actions/checkout@v6
+      - uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
         name: Validate Pull Request Metadata
         with:
           mode: validate
@@ -233,8 +235,8 @@ jobs:
     name: Bump and Tag Version
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: jefflinse/pr-semver-bump@v1.6.0
+      - uses: actions/checkout@v6
+      - uses: mr-fixit-sj/pr-semver-bump@vX.Y.Z
         name: Bump and Tag Version
         with:
           mode: bump
@@ -257,7 +259,7 @@ This project is actively maintained. Please open an issue if you find a bug, or 
 
 ### Building
 
-This is a Node.js project. Make sure you have Node and NPM installed, then:
+This is a Node.js project. Make sure you have Node.js 24 (see `.nvmrc`) and NPM installed, then:
 
 Install dependencies:
 
