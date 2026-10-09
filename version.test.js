@@ -196,3 +196,66 @@ test('can create a new release', async () => {
     config.v = 'v'
     await expect(createRelease('1.2.3', 'mock release notes', config)).resolves.toBe('v1.2.3')
 })
+
+const httpError = (status, message) => Object.assign(new Error(message), { status })
+
+test('explains missing write permission when creating a tag fails', async () => {
+    process.env['GITHUB_REPOSITORY'] = 'mockUser/mockRepo'
+    const config = {
+        v: 'v',
+        octokit: {
+            rest: {
+                git: {
+                    createTag: async () => {
+                        throw httpError(403, 'Resource not accessible by integration')
+                    },
+                },
+            },
+        },
+    }
+
+    await expect(createRelease('1.2.3', 'notes', config)).rejects.toThrow(
+        'creating tag v1.2.3 failed: Resource not accessible by integration. The token passed as `repo-token` needs write access',
+    )
+})
+
+test('explains missing write permission when creating a ref fails', async () => {
+    process.env['GITHUB_REPOSITORY'] = 'mockUser/mockRepo'
+    const config = {
+        v: '',
+        octokit: {
+            rest: {
+                git: {
+                    createTag: async () => ({ data: { sha: 'mockSha' } }),
+                    createRef: async () => {
+                        throw httpError(404, 'Not Found')
+                    },
+                },
+            },
+        },
+    }
+
+    await expect(createRelease('1.2.3', 'notes', config)).rejects.toThrow(
+        'creating ref refs/tags/1.2.3 failed: Not Found. The token passed as `repo-token` needs write access',
+    )
+})
+
+test('passes other tag creation errors through unchanged', async () => {
+    process.env['GITHUB_REPOSITORY'] = 'mockUser/mockRepo'
+    const original = httpError(422, 'Reference already exists')
+    const config = {
+        v: '',
+        octokit: {
+            rest: {
+                git: {
+                    createTag: async () => ({ data: { sha: 'mockSha' } }),
+                    createRef: async () => {
+                        throw original
+                    },
+                },
+            },
+        },
+    }
+
+    await expect(createRelease('1.2.3', 'notes', config)).rejects.toBe(original)
+})
