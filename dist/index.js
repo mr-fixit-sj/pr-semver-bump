@@ -32805,15 +32805,20 @@ function extractPRNumber(commitMsg) {
     return null
 }
 
+// Returns the merged PR containing the given commit, or null if there is none
+// (e.g. a direct push or the repository's first commit).
 async function searchPRByCommit(commitSHA, config) {
     // Query GitHub to see if the commit sha is related to a PR
     // Rebase merge will not have the information in the commit message
     try {
-        const q = `type:pr is:merged ${commitSHA}`
+        // Scope to this repository: commit SHAs are shared with forks, so an unscoped
+        // search can return a merged PR from another repository.
+        const { owner, repo } = github.context.repo
+        const q = `repo:${owner}/${repo} type:pr is:merged ${commitSHA}`
         const data = await config.octokit.rest.search.issuesAndPullRequests({ q })
 
         if (data.data.total_count < 1) {
-            throw new Error('No results found querying for the PR')
+            return null
         }
 
         // We should only find one PR with the commit SHA that was merged so take the first one
@@ -32852,7 +32857,7 @@ function getReleaseType(pr, config) {
     } else if (releaseLabelsPresent.length > 1) {
         throw new Error(`too many release labels specified on PR: ${releaseLabelsPresent}`)
     } else if (releaseLabelsPresent.length >= 1 && noopLabelsPresent.length >= 1) {
-        throw new Error(`too manu labels specified, both release labels and noop labels specified: (${releaseLabelsPresent})  (${noopLabelsPresent}) on PR`)
+        throw new Error(`too many labels specified, both release labels and noop labels specified: (${releaseLabelsPresent}) (${noopLabelsPresent}) on PR`)
     }
 
     return (releaseLabelsPresent.length === 1)
@@ -32965,22 +32970,44 @@ async function getLatestVersionInCommits(commits, sortedVersions, objectsByVersi
     return DEFAULT_VERSION
 }
 
+// Explains a 403/404 from a write call, which almost always means the token lacks write access.
+function permissionError(err, action) {
+    if (err.status !== 403 && err.status !== 404) {
+        return err
+    }
+    const e = new Error(`${action} failed: ${err.message}. `
+        + 'The token passed as `repo-token` needs write access to repository contents; '
+        + 'for the default GITHUB_TOKEN, grant the `contents: write` workflow permission '
+        + '(see the Permissions section of the README).')
+    e.status = err.status
+    return e
+}
+
 // Tags the specified version and annotates it with the provided release notes.
 async function createRelease(version, releaseNotes, config) {
     const tag = `${config.v}${version}`
-    const tagCreateResponse = await config.octokit.rest.git.createTag({
-        ...github.context.repo,
-        tag: tag,
-        message: releaseNotes,
-        object: process.env.GITHUB_SHA,
-        type: 'commit',
-    })
+    let tagCreateResponse
+    try {
+        tagCreateResponse = await config.octokit.rest.git.createTag({
+            ...github.context.repo,
+            tag: tag,
+            message: releaseNotes,
+            object: process.env.GITHUB_SHA,
+            type: 'commit',
+        })
+    } catch (e) {
+        throw permissionError(e, `creating tag ${tag}`)
+    }
 
-    await config.octokit.rest.git.createRef({
-        ...github.context.repo,
-        ref: `refs/tags/${tag}`,
-        sha: tagCreateResponse.data.sha,
-    })
+    try {
+        await config.octokit.rest.git.createRef({
+            ...github.context.repo,
+            ref: `refs/tags/${tag}`,
+            sha: tagCreateResponse.data.sha,
+        })
+    } catch (e) {
+        throw permissionError(e, `creating ref refs/tags/${tag}`)
+    }
 
     return tag
 }
@@ -34979,22 +35006,30 @@ async function validateActivePR(config) {
     let releaseNotes
     try {
         releaseType = getReleaseType(pr, config)
-        releaseNotes = getReleaseNotes(pr, config)
+        // A no-op label means no release, so there are no release notes to require.
+        if (releaseType !== 'skip') {
+            releaseNotes = getReleaseNotes(pr, config)
+        }
     } catch (e) {
         core.setFailed(`PR validation failed: ${e.message}`)
         return
     }
 
     const currentVersion = await getCurrentVersion(config)
-    const newVersion = semver.inc(currentVersion, releaseType)
-
     core.info(`current version: ${config.v}${currentVersion}`)
-    core.info(`next version: ${config.v}${newVersion}`)
-    core.info(`release notes:\n${releaseNotes}`)
-
     core.setOutput('old-version', `${config.v}${currentVersion}`)
-    core.setOutput('version', `${config.v}${newVersion}`)
-    core.setOutput('release-notes', releaseNotes)
+
+    if (releaseType === 'skip') {
+        core.info('PR has a no-op label, no new version will be released')
+    } else {
+        const newVersion = semver.inc(currentVersion, releaseType)
+        core.info(`next version: ${config.v}${newVersion}`)
+        core.info(`release notes:\n${releaseNotes}`)
+
+        core.setOutput('version', `${config.v}${newVersion}`)
+        core.setOutput('release-notes', releaseNotes)
+    }
+    core.setOutput('skipped', (releaseType === 'skip'))
 }
 
 // Increments the version according to the release type and tags a new version with release notes.

@@ -22,26 +22,32 @@ test('returns null if no PR number is found in a commit message', () => {
 })
 
 test('searchPRByCommit returns a PR', async () => {
+    process.env['GITHUB_REPOSITORY'] = 'mockUser/mockRepo'
     const sha = '123456789'
+    let query
     const config = {
         octokit: {
             rest: {
                 search: {
-                    issuesAndPullRequests: async (options) => ({
-                        data: {
-                            total_count: 1,
-                            items: [{ number: 15, id: sha }],
-                            query: options.q,
-                        },
-                    }),
+                    issuesAndPullRequests: async (options) => {
+                        query = options.q
+                        return {
+                            data: {
+                                total_count: 1,
+                                items: [{ number: 15, id: sha }],
+                            },
+                        }
+                    },
                 },
             },
         },
     }
-    expect(searchPRByCommit(sha, config)).resolves.toEqual({ number: 15, id: sha })
+    await expect(searchPRByCommit(sha, config)).resolves.toEqual({ number: 15, id: sha })
+    expect(query).toEqual(`repo:mockUser/mockRepo type:pr is:merged ${sha}`)
 })
 
-test('searchPRByCommit Fails to find PR', async () => {
+test('searchPRByCommit returns null when no merged PR contains the commit', async () => {
+    process.env['GITHUB_REPOSITORY'] = 'mockUser/mockRepo'
     const sha = '123456789'
     const config = {
         octokit: {
@@ -52,7 +58,7 @@ test('searchPRByCommit Fails to find PR', async () => {
             },
         },
     }
-    expect(searchPRByCommit(sha, config)).rejects.toThrow(`Failed to find PR by commit SHA ${sha}: No results found querying for the PR`)
+    await expect(searchPRByCommit(sha, config)).resolves.toBeNull()
 })
 
 test('searchPRByCommit throws an error on query', async () => {
@@ -68,7 +74,7 @@ test('searchPRByCommit throws an error on query', async () => {
             },
         },
     }
-    expect(searchPRByCommit(sha, config)).rejects.toThrow(`Failed to find PR by commit SHA ${sha}: mock error`)
+    await expect(searchPRByCommit(sha, config)).rejects.toThrow(`Failed to find PR by commit SHA ${sha}: mock error`)
 })
 
 test('can fetch PR data', async () => {
@@ -83,7 +89,7 @@ test('can fetch PR data', async () => {
         },
     }
 
-    expect(fetchPR(42, config)).resolves.toEqual({ number: 42 })
+    await expect(fetchPR(42, config)).resolves.toEqual({ number: 42 })
 })
 
 test('throws when fetching PR data fails', async () => {
@@ -100,7 +106,7 @@ test('throws when fetching PR data fails', async () => {
         },
     }
 
-    expect(fetchPR(42, config)).rejects.toThrow('')
+    await expect(fetchPR(42, config)).rejects.toThrow('')
 })
 
 test('can get release type', () => {
@@ -237,7 +243,7 @@ test('throws if both a valid release label and a noop label are present', () => 
 
     expect(() => {
         getReleaseType(mockPR, config)
-    }).toThrow('too manu labels specified, both release labels and noop labels specified')
+    }).toThrow('too many labels specified, both release labels and noop labels specified')
 })
 
 describe('can parse release notes', () => {
