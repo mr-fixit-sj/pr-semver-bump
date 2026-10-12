@@ -44,6 +44,7 @@ jobs:
           require-release-notes: true
           release-notes-prefix: '### RELEASE NOTES'
           with-v: true
+          create-release: true
 
       # Keep a floating major tag (e.g. v2) pointing at the newest release so
       # consumers can use `@v2`. Only moves when a real version was tagged.

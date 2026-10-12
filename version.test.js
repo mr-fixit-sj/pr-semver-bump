@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-const { getCurrentVersion, createRelease } = require('./version')
+const { getCurrentVersion, createRelease, publishRelease } = require('./version')
 
 test('can get the current version when version tags are available', async () => {
     process.env['GITHUB_REPOSITORY'] = 'mockUser/mockRepo'
@@ -258,4 +258,45 @@ test('passes other tag creation errors through unchanged', async () => {
     }
 
     await expect(createRelease('1.2.3', 'notes', config)).rejects.toBe(original)
+})
+
+test('publishes a GitHub Release for a tag', async () => {
+    process.env['GITHUB_REPOSITORY'] = 'mockUser/mockRepo'
+    let request
+    const config = {
+        octokit: {
+            rest: {
+                repos: {
+                    createRelease: async (options) => {
+                        request = options
+                        return { data: { html_url: 'https://github.com/mockUser/mockRepo/releases/tag/v1.2.3' } }
+                    },
+                },
+            },
+        },
+    }
+
+    await expect(publishRelease('v1.2.3', 'notes', config)).resolves.toBe('https://github.com/mockUser/mockRepo/releases/tag/v1.2.3')
+    expect(request).toEqual({
+        owner: 'mockUser', repo: 'mockRepo', tag_name: 'v1.2.3', name: 'v1.2.3', body: 'notes',
+    })
+})
+
+test('explains missing write permission when publishing a release fails', async () => {
+    process.env['GITHUB_REPOSITORY'] = 'mockUser/mockRepo'
+    const config = {
+        octokit: {
+            rest: {
+                repos: {
+                    createRelease: async () => {
+                        throw httpError(403, 'Resource not accessible by integration')
+                    },
+                },
+            },
+        },
+    }
+
+    await expect(publishRelease('v1.2.3', 'notes', config)).rejects.toThrow(
+        'publishing release v1.2.3 failed: Resource not accessible by integration. The token passed as `repo-token` needs write access',
+    )
 })

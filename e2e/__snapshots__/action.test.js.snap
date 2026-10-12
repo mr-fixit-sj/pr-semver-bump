@@ -120,6 +120,199 @@ exports[`bump: base-branch from GITHUB_REF 1`] = `
 }
 `;
 
+exports[`bump: create-release forbidden after tagging 1`] = `
+{
+  "exitCode": 1,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #24",
+    "Created release tag v2.0.0 with the following release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+    "::error::publishing release v2.0.0 failed: Resource not accessible by integration. The token passed as \`repo-token\` needs write access to repository contents; for the default GITHUB_TOKEN, grant the \`contents: write\` workflow permission (see the Permissions section of the README). Tag v2.0.0 was created; publish its release manually instead of re-running this job, which would bump the version again.",
+    "",
+  ],
+  "outputs": [
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/24",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "v2.0.0",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "ref": "refs/tags/v2.0.0",
+        "sha": "newtagobj",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/refs",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "body": "- fixed a thing
+- added a thing",
+        "name": "v2.0.0",
+        "tag_name": "v2.0.0",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/releases",
+    },
+  ],
+}
+`;
+
+exports[`bump: create-release publishes a GitHub Release 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #23",
+    "Created release tag v2.0.0 with the following release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+    "Published release v2.0.0: https://github.com/o/r/releases/tag/new",
+    "",
+  ],
+  "outputs": [
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "release-url<<DELIMITER",
+    "https://github.com/o/r/releases/tag/new",
+    "DELIMITER",
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/23",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "message": "- fixed a thing
+- added a thing",
+        "object": "headsha",
+        "tag": "v2.0.0",
+        "type": "commit",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/tags",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "ref": "refs/tags/v2.0.0",
+        "sha": "newtagobj",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/git/refs",
+    },
+    {
+      "auth": "token tok123",
+      "body": {
+        "body": "- fixed a thing
+- added a thing",
+        "name": "v2.0.0",
+        "tag_name": "v2.0.0",
+      },
+      "method": "POST",
+      "path": "/repos/o/r/releases",
+    },
+  ],
+}
+`;
+
+exports[`bump: create-release with noop label publishes nothing 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "Processing version bump for PR request #25",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "true",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/25",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
+    },
+  ],
+}
+`;
+
 exports[`bump: first release, no tags 1`] = `
 {
   "exitCode": 0,
@@ -779,6 +972,51 @@ exports[`validate: base-branch, no tag on branch 1`] = `
       "body": undefined,
       "method": "GET",
       "path": "/repos/o/r/commits?sha=main",
+    },
+  ],
+}
+`;
+
+exports[`validate: create-release is ignored 1`] = `
+{
+  "exitCode": 0,
+  "log": [
+    "::add-mask::tok123",
+    "current version: v2.0.0-beta.1",
+    "next version: v2.0.0",
+    "release notes:",
+    "- fixed a thing",
+    "- added a thing",
+    "",
+  ],
+  "outputs": [
+    "old-version<<DELIMITER",
+    "v2.0.0-beta.1",
+    "DELIMITER",
+    "version<<DELIMITER",
+    "v2.0.0",
+    "DELIMITER",
+    "release-notes<<DELIMITER",
+    "- fixed a thing",
+    "- added a thing",
+    "DELIMITER",
+    "skipped<<DELIMITER",
+    "false",
+    "DELIMITER",
+    "",
+  ],
+  "requests": [
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/pulls/7",
+    },
+    {
+      "auth": "token tok123",
+      "body": undefined,
+      "method": "GET",
+      "path": "/repos/o/r/git/matching-refs/tags/",
     },
   ],
 }

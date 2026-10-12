@@ -33,6 +33,9 @@ function startMockGitHub(fixture = {}) {
             ? [fixture.createTagStatus, { message: 'Resource not accessible by integration' }]
             : [201, { sha: 'newtagobj' }])],
         ['POST', /^\/repos\/o\/r\/git\/refs$/, () => [201, { ref: 'ok' }]],
+        ['POST', /^\/repos\/o\/r\/releases$/, () => (fixture.createReleaseStatus
+            ? [fixture.createReleaseStatus, { message: 'Resource not accessible by integration' }]
+            : [201, { html_url: 'https://github.com/o/r/releases/tag/new' }])],
     ]
 
     server = http.createServer((req, res) => {

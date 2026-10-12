@@ -92,6 +92,7 @@ Inputs can be used to customize the behavior of the action in both modes.
 | `release-notes-suffix`  | If defined, constrains release notes to any text appearing before a line matching this pattern in the pull request body. By default, release notes end at the end of the pull request description.        |
 | `with-v`                | If true, newly tagged versions will be prefixed with 'v', e.g. 'v1.2.3'.                                                                                                                                  |
 | `base-branch`           | Whether or not to only consider version tags on the base branch in the pull request.                                                                                                                      |
+| `create-release`        | Whether or not to also publish a GitHub Release for the new tag in `bump` mode, using the release notes as its description. _Default: `false`_.                                                           |
 
 ### Using Custom Label Names
 
@@ -175,6 +176,7 @@ The following outputs are available (in both modes):
 | `version`       | The version after bumping. Not provided when skipped.                           |
 | `release-notes` | Release notes found in the pull request description. Not provided when skipped. |
 | `skipped`       | Indicator set to true if the version bump was skipped.                          |
+| `release-url`   | URL of the published GitHub Release. Only provided when `create-release` is true. |
 
 ## Permissions
 
@@ -251,6 +253,7 @@ jobs:
           release-notes-suffix: ''
           with-v: false
           base-branch: false
+          create-release: false
 ```
 
 ## Contributing

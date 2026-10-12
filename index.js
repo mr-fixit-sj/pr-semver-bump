@@ -9,7 +9,7 @@ const {
     getReleaseType,
     getReleaseNotes,
 } = require('./pr')
-const { createRelease, getCurrentVersion } = require('./version')
+const { createRelease, getCurrentVersion, publishRelease } = require('./version')
 
 // Returns true if the current context looks like an active PR.
 function isActivePR() {
@@ -100,6 +100,17 @@ async function bumpAndTagNewVersion(config) {
 
         core.setOutput('version', newTag)
         core.setOutput('release-notes', releaseNotes)
+
+        if (config.createRelease) {
+            try {
+                const releaseUrl = await publishRelease(newTag, releaseNotes, config)
+                core.info(`Published release ${newTag}: ${releaseUrl}`)
+                core.setOutput('release-url', releaseUrl)
+            } catch (e) {
+                // The tag already exists, so re-running the job would bump to yet another version.
+                core.setFailed(`${e.message} Tag ${newTag} was created; publish its release manually instead of re-running this job, which would bump the version again.`)
+            }
+        }
     }
     core.setOutput('old-version', `${config.v}${currentVersion}`)
     core.setOutput('skipped', (releaseType === 'skip'))

@@ -95,6 +95,12 @@ module.exports = [
     bump('no release label', 'x (#17)', base, { prs: { 17: pr(17, [], NOTES) }, tags: mixedTags }),
     bump('PR not found', 'x (#18)', base, {}),
     bump('tag creation forbidden', 'x (#22)', base, { prs: { 22: pr(22, ['minor release'], NOTES) }, tags: mixedTags, createTagStatus: 403 }),
+    bump('create-release publishes a GitHub Release', 'x (#23)', { ...base, 'create-release': 'true' }, { prs: { 23: pr(23, ['minor release'], NOTES) }, tags: mixedTags }),
+    bump('create-release forbidden after tagging', 'x (#24)', { ...base, 'create-release': 'true' }, {
+        prs: { 24: pr(24, ['minor release'], NOTES) }, tags: mixedTags, createReleaseStatus: 403,
+    }),
+    bump('create-release with noop label publishes nothing', 'x (#25)', { ...base, 'create-release': 'true', 'noop-labels': 'no release' }, { prs: { 25: pr(25, ['no release'], '') }, tags: mixedTags }),
+    validate('create-release is ignored', { ...base, 'create-release': 'true' }, { prs: { 7: pr(7, ['minor release'], NOTES) }, tags: mixedTags }),
     bump('first release, no tags', 'x (#19)', base, { prs: { 19: pr(19, ['minor release'], NOTES) }, tags: [] }),
     bump('base-branch from GITHUB_REF', 'x (#20)', { ...base, 'base-branch': 'true' }, { prs: { 20: pr(20, ['patch release'], NOTES) }, ...branchFixture }, { GITHUB_REF: 'refs/heads/main' }),
     bump('prerelease current, patch', 'x (#21)', base, { prs: { 21: pr(21, ['patch release'], NOTES) }, tags: [['v1.2.3-rc.2', 'commit', 'p']] }),

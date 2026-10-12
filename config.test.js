@@ -17,6 +17,7 @@ test('establishes config from minimum required inputs', () => {
     expect(config.releaseNotesPrefixPattern).toBeUndefined()
     expect(config.releaseNotesSuffixPattern).toBeUndefined()
     expect(config.requireReleaseNotes).toBe(false)
+    expect(config.createRelease).toBe(false)
     expect(config.v).toBe('')
     expect(config.octokit).toBeDefined()
     expect(config.octokit).not.toBeNull()
@@ -33,6 +34,7 @@ test('establishes config from complete set of inputs', () => {
     process.env['INPUT_RELEASE-NOTES-PREFIX'] = 'release-notes-prefix-text'
     process.env['INPUT_RELEASE-NOTES-SUFFIX'] = 'release-notes-suffix-text'
     process.env['INPUT_WITH-V'] = 'true'
+    process.env['INPUT_CREATE-RELEASE'] = 'true'
 
     const config = getConfig()
     expect(config.mode).toBe('validate')
@@ -48,6 +50,7 @@ test('establishes config from complete set of inputs', () => {
     expect(config.releaseNotesPrefixPattern).toEqual(/release-notes-prefix-text/)
     expect(config.releaseNotesSuffixPattern).toEqual(/release-notes-suffix-text/)
     expect(config.requireReleaseNotes).toBe(true)
+    expect(config.createRelease).toBe(true)
     expect(config.v).toBe('v')
     expect(config.octokit).toBeDefined()
     expect(config.octokit).not.toBeNull()

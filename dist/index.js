@@ -48,6 +48,7 @@ function getConfig() {
         releaseNotesSuffixPattern: releaseNotesSuffixPattern,
         requireReleaseNotes: core.getInput('require-release-notes').toLowerCase() === 'true',
         baseBranch: core.getInput('base-branch').toLowerCase() === 'true',
+        createRelease: core.getInput('create-release').toLowerCase() === 'true',
         v: core.getInput('with-v').toLowerCase() === 'true' ? 'v' : '',
     }
 }
@@ -33012,6 +33013,21 @@ async function createRelease(version, releaseNotes, config) {
     return tag
 }
 
+// Publishes a GitHub Release for an existing tag and returns the release's URL.
+async function publishRelease(tag, releaseNotes, config) {
+    try {
+        const release = await config.octokit.rest.repos.createRelease({
+            ...github.context.repo,
+            tag_name: tag,
+            name: tag,
+            body: releaseNotes,
+        })
+        return release.data.html_url
+    } catch (e) {
+        throw permissionError(e, `publishing release ${tag}`)
+    }
+}
+
 // Returns the most recent tagged version in git.
 async function getCurrentVersion(config) {
     const data = await config.octokit.rest.git.listMatchingRefs({
@@ -33048,6 +33064,7 @@ async function getCurrentVersion(config) {
 }
 
 exports.createRelease = createRelease
+exports.publishRelease = publishRelease
 exports.getCurrentVersion = getCurrentVersion
 
 
@@ -34975,7 +34992,7 @@ const {
     getReleaseType,
     getReleaseNotes,
 } = __nccwpck_require__(220)
-const { createRelease, getCurrentVersion } = __nccwpck_require__(9908)
+const { createRelease, getCurrentVersion, publishRelease } = __nccwpck_require__(9908)
 
 // Returns true if the current context looks like an active PR.
 function isActivePR() {
@@ -35066,6 +35083,17 @@ async function bumpAndTagNewVersion(config) {
 
         core.setOutput('version', newTag)
         core.setOutput('release-notes', releaseNotes)
+
+        if (config.createRelease) {
+            try {
+                const releaseUrl = await publishRelease(newTag, releaseNotes, config)
+                core.info(`Published release ${newTag}: ${releaseUrl}`)
+                core.setOutput('release-url', releaseUrl)
+            } catch (e) {
+                // The tag already exists, so re-running the job would bump to yet another version.
+                core.setFailed(`${e.message} Tag ${newTag} was created; publish its release manually instead of re-running this job, which would bump the version again.`)
+            }
+        }
     }
     core.setOutput('old-version', `${config.v}${currentVersion}`)
     core.setOutput('skipped', (releaseType === 'skip'))

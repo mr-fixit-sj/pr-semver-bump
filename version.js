@@ -87,6 +87,21 @@ async function createRelease(version, releaseNotes, config) {
     return tag
 }
 
+// Publishes a GitHub Release for an existing tag and returns the release's URL.
+async function publishRelease(tag, releaseNotes, config) {
+    try {
+        const release = await config.octokit.rest.repos.createRelease({
+            ...github.context.repo,
+            tag_name: tag,
+            name: tag,
+            body: releaseNotes,
+        })
+        return release.data.html_url
+    } catch (e) {
+        throw permissionError(e, `publishing release ${tag}`)
+    }
+}
+
 // Returns the most recent tagged version in git.
 async function getCurrentVersion(config) {
     const data = await config.octokit.rest.git.listMatchingRefs({
@@ -123,4 +138,5 @@ async function getCurrentVersion(config) {
 }
 
 exports.createRelease = createRelease
+exports.publishRelease = publishRelease
 exports.getCurrentVersion = getCurrentVersion
